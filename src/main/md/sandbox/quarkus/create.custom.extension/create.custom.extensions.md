@@ -2,11 +2,15 @@ One day I decided to explore quarkus.
 
 # exploring quarkus
 
+ Quickly I arrived at a point where I wanted to reuse a custom java library. It turned out that this involves more than just the usual adding of another dependency to a maven `pom.xml`. What you need is to create an own quarkus extension for your library. The reason for this is explained [here](https://quarkus.io/guides/writing-extensions).
+
+I decided to create a minimal POC for a minimal custom quarkus extension.
+ 
 First things first - hello world:
 
 ## create minimal quarkus app
 
-Thanks to [quarkus application generator](https://code.quarkus.io/) I got my first app running within minutes.
+Thanks to [quarkus application generator](https://code.quarkus.io/) I got a minimal quarkus app running within minutes.
 
 ```java
 package app;
@@ -28,7 +32,7 @@ public class GreetingResource
 }
 ```
 
-For my new app I wanted to reuse a regular custom library that happily lives in a project outside my quarkus application and is available in my local maven repository.
+I also created a maven project for a minimal custom java library and made it available in my local maven repository:
 
 ## create minimal custom library
 
@@ -43,7 +47,7 @@ public class MathOps
 
 ## include library to dependencies of quarkus app
 
-To make my library available in my quarkus app I added it as a maven dependency into pom.xml of my app.
+To make my library available in my quarkus app I added it as a maven dependency into `pom.xml` of my app.
 
 ```xml
 <dependency>
@@ -83,7 +87,7 @@ At first glance everything seemed to be fine. At least this compiled perfectly i
 
 ## quarkus complaints
 
-However, this turned out to be a too simplistic approach. Using a regular library as regular maven dependency is not the quarkus-style of using libraries!
+However, as mentioned above this turned out to be a too simplistic approach for quarkus. Using a regular library as regular maven dependency is not the quarkus-style of using libraries!
 
 Trouble started when I compiled the project with:
 
