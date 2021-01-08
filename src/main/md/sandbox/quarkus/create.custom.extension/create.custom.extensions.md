@@ -10,13 +10,13 @@ I decided to create a minimal POC for a minimal custom quarkus extension. So I s
 
 Thanks to [quarkus application generator](https://code.quarkus.io/) I got a minimal quarkus app running within minutes. Alternatively you can create the app with maven from the command line:
 
-> [Create and ]Change to a (new) directory of your choice.
+> [Create and] Change to a (new) directory of your choice!
 
 ```
 mvn io.quarkus:quarkus-maven-plugin:1.10.5.Final:create -DprojectGroupId=ruu.io -DprojectArtifactId=app -DclassName="app.GreetingResource" -Dpath="/hello"
 ```
 
-This is the resulting minimal quarkus app:
+This is the resulting minimal quarkus app (I just modified the greeting string and adjusted the generated tests accordingly):
 
 ```java
 package app;
@@ -66,6 +66,8 @@ In the app's `pom.xml` I had to deactivate two execution goals in `project.build
 ```
 
 >I think somewhere I saw that this is for now an unresolved issue for the quarkus maven goal ... Please let me know if there is a fix availabel for this.
+
+After that this app and the tests worked.
 
 To continue my POC for reusing custom java libraries in quarkus apps I also created a maven project for a minimal java library and made it available in my local maven repository:
 
