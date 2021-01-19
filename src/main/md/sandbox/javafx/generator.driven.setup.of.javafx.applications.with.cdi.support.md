@@ -1,10 +1,13 @@
-# Building large JavaFX applications with loosely coupled, self-contained visual components using CDI
+# Building large JavaFX applications with CDI
 
-Large systems are typically constructed from smaller systems. CDI facilitates loose coupling and efficient collaboration of independent systems. This article describes an approach to make CDI available in JavaFX applications.
+Large systems are typically built from smaller systems. CDI facilitates loose coupling and efficient collaboration of independent subsystems. This article describes an approach to make CDI conveniently available in JavaFX applications.
 
-When building JavaFX applications there are many recurring tasks that can be accomplished in a standardised and automatic manner. This can be achieved by using some abstractions of standard JavaFX classes and compliance to some naming conventions, that allow to automate those tasks. This article describes an approach that introduces some tooling for automation and a framework for bootstrapping JavaFX applications.
+When building JavaFX applications there are many recurring tasks to be accomplished. Another goal of the approach described here is to show how automation and standardisation of these tasks can be achieved by
+* following a few naming conventions for typical JavaFX artifacts such as JavaFX application and controller classes, ```.fxml``` files, ...,
+* making use of some predefined framework classes that provide useful additional functionality instead of using JavaFX classes such as JavaFX application class ... directly and
+* leveraging a code generation tool that automates the creation of skeletons for the aforementioned artifacts.
 
-Code examples for everything described here can be downloaded from [xxx](xxx).
+Code examples can be downloaded from [xxx](xxx).
 
 ## Setting up vanilla JavaFX applications
 
@@ -12,7 +15,7 @@ A typical JavaFX application is composed from multiple artifacts. Following some
 
 * ```XApp.java```
 
-  A class that is derived from JavaFX ```Application``` and that populates the JavaFX ```Stage``` with a JavaFX ```Scene```. JavaFX provides means to create a ```Scene``` instance from a declarative UI description file with the name suffix ```.fxml```: 
+  A class that is derived from ```javafx.application.Application``` and that populates the ```javafx.stage.Stage``` with a ```javafx.scene.Scene```. JavaFX provides means to create a ```Scene``` instance from a declarative UI description file with the name suffix ```.fxml```: 
 
 * ```XApp.fxml```
  
@@ -20,11 +23,11 @@ A typical JavaFX application is composed from multiple artifacts. Following some
 
 * ```XAppController.java```
 
-  A JavaFX controller is a class that initialises the UI elements defined in a JavaFX ```Scene``` and controls how the app reacts on UI events.
+  A JavaFX controller is a class that initialises the UI elements defined in a ```Scene``` and controls how the app reacts on UI events.
 
-JavaFX comes with support for convenient injection of UI components into controller instances that define the behaviour of JavaFX applications. ```@FXML``` annotated fields in controller classes do the trick.
+JavaFX comes with support for convenient injection of UI components into controller instances that define the behaviour of JavaFX applications. ```@FXML``` annotated fields in controller classes do the trick. 
 
-What is missing in vanilla JavaFX is built in support for CDI. And it can be challenging to properly bootstrap a CDI container without harmfully interferring JavaFX's startup procedure. The following chapter describes an approach that hides CDI bootstrapping and takes care of recurring tasks for JavaFX development.
+However, the bigger applications grow the more urgent becomes the need to split it up into smaller, better maintainable pieces. The following shows how a JavaFX app can be built from smaller apps where each app can be run and tested on its own.
 
 ## Extending basic JavaFX building blocks
 
@@ -48,7 +51,10 @@ We'll have a closer look at each of these building blocks in the following.
 
 ```CDIApplication``` is an abstract sub class of ```javafx.application.Application```.
 
- that support injection via @FXML annotations and CDI.
+
+What is missing in vanilla JavaFX is built in support for CDI. And it can be challenging to properly bootstrap a CDI container without harmfully interferring JavaFX's startup procedure. The following chapter describes an approach that hides CDI bootstrapping and takes care of recurring tasks for JavaFX development.
+
+that support injection via @FXML annotations and CDI.
 
 I built a couple of JavaFX components and found myself doing the same things again and again. So I decided to automate these efforts. Here is a description for a use of a generator I have built for these tasks.
 
