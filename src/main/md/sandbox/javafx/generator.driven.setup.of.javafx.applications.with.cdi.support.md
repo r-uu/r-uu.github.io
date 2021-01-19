@@ -2,7 +2,7 @@
 
 Large systems are typically constructed from smaller systems. CDI facilitates loose coupling and efficient collaboration of independent systems. This article describes an approach to make CDI available in JavaFX applications.
 
-When building JavaFX applications there are many recurring tasks that can be accomplished in a standardised and automatic manner. This can be achieved by using some abstractions of standard JavaFX classes and compliance to some naming conventions, that allow to automate those tasks. This article also describes abstractions, conventions and tools that facilitate automation of these tasks.
+When building JavaFX applications there are many recurring tasks that can be accomplished in a standardised and automatic manner. This can be achieved by using some abstractions of standard JavaFX classes and compliance to some naming conventions, that allow to automate those tasks. This article describes an approach that introduces some tooling for automation and a framework for bootstrapping JavaFX applications.
 
 Code examples for everything described here can be downloaded from [xxx](xxx).
 
@@ -22,19 +22,15 @@ A typical JavaFX application is composed from multiple artifacts. Following some
 
   A JavaFX controller is a class that initialises the UI elements defined in a JavaFX ```Scene``` and controls how the app reacts on UI events.
 
-
 JavaFX comes with support for convenient injection of UI components into controller instances that define the behaviour of JavaFX applications. ```@FXML``` annotated fields in controller classes do the trick.
 
-What is missing in vanilla JavaFX is support for CDI that allows to combine ```@FXML``` annotated fields with CDI ```@Inject``` annotated elements and 
+What is missing in vanilla JavaFX is built in support for CDI. And it can be challenging to properly bootstrap a CDI container without harmfully interferring JavaFX's startup procedure. The following chapter describes an approach that hides CDI bootstrapping and takes care of recurring tasks for JavaFX development.
 
-> xxxCDI Eventsxxx.
+## Extending basic JavaFX building blocks
 
-This article describes how to automatically add CDI support together with some features that help developing JavaFX applications as reusable UI components.
+With JavaFX it is possible to create large UI applications from smaller JavaFX apps. This helps to make testing much easier and contributes to overall robustness.
 
-## Standard building blocks of JavaFX applications
-
-
-With JavaFX it is possible to create apps that consist of loosely coupled, reusable UI-components. Therefore these basic building blocks can be enhanced by additional parts such as:
+This approach enhances the before mentioned basic building blocks of a JavaFX application:
 
 * ```XAppService.java```
 
@@ -42,7 +38,9 @@ With JavaFX it is possible to create apps that consist of loosely coupled, reusa
 
 * ```XAppView.java```
 
-  A view class that provides typical UI funcionality for other components.
+  A view class that provides typical UI funcionality that may be useful for collaboration with other components.
+
+* ```XAppRunner.java```
 
 We'll have a closer look at each of these building blocks in the following.
 
