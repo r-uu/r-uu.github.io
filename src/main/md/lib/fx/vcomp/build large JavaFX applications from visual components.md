@@ -1,6 +1,10 @@
-# Building large JavaFX applications with CDI
+# Building large JavaFX applications with ```FXVComp```
 
-Large systems are typically built from smaller systems. CDI facilitates loose coupling and efficient collaboration of independent subsystems. This article describes an approach to make CDI conveniently available in JavaFX applications.
+Large systems are typically built from smaller components which themselves are built from even smaller components and so on. ```FXVComp``` provides support for building visual components with JavaFX that can be designed, run and tested on their own and be integrated into complex systems.
+
+```FXVComp``` provides 
+
+CDI facilitates loose coupling and efficient collaboration of independent subsystems. This article describes an approach to make CDI conveniently available in JavaFX applications.
 
 When building JavaFX applications there are many recurring tasks to be accomplished. Another goal of the approach described here is to show how automation and standardisation of these tasks can be achieved by
 * following a few naming conventions for typical JavaFX artifacts such as JavaFX application and controller classes, ```.fxml``` files, ...,
