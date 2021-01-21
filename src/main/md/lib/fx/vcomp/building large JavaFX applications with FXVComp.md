@@ -1,19 +1,31 @@
 # Building large JavaFX applications with ```FXVComp```
 
-Large systems are typically built from smaller components which themselves are built from even smaller components and so on. ```FXVComp``` provides support for building visual components with JavaFX that can be designed, run and tested on their own and be integrated into complex systems.
+Large systems are typically built from smaller components which themselves are built from even smaller components and so on. ```FXVComp``` provides support for building visual components with JavaFX that can be designed, run and tested on their own as well as be integrated into complex systems. In particular ```FXVComp``` leverages CDI that facilitates loose coupling and efficient collaboration of independent subsystems.
 
-```FXVComp``` provides 
+A visual component in ```FXVComp``` consists at least of the following parts:
 
-CDI facilitates loose coupling and efficient collaboration of independent subsystems. This article describes an approach to make CDI conveniently available in JavaFX applications.
+* A component class derived from ```FXCView```,
+* a ```.fxml``` file,
+* a component controller class derived from ```FXCController``` and
+* a component service implementation extending ```FXCService```.
 
-When building JavaFX applications there are many recurring tasks to be accomplished. Another goal of the approach described here is to show how automation and standardisation of these tasks can be achieved by
-* following a few naming conventions for typical JavaFX artifacts such as JavaFX application and controller classes, ```.fxml``` files, ...,
-* making use of some predefined framework classes that provide useful additional functionality instead of using JavaFX classes such as JavaFX application class ... directly and
-* leveraging a code generation tool that automates the creation of skeletons for the aforementioned artifacts.
+The super types of the artifacts are provided by the ```FXVComp``` framework and will be described later.
+
+In fact there can be even more artifacts that are used by ```FXVComp``` components. These will also be described later. 
+
+However, developers of non trivial JavaFX applications always have to deal with pretty much recurring tasks. ```FXVComp``` accomplishes this by a tool that automates the initial generation of skeletons for the artifacts in a very flexible manner. By default it will introduce a naming convention for the artifacts that standardises naming and helps to keep track of all the parts needed for ```FXVComp``` components. The conventions can be overwritten to meet specific needs.
+
+In the following this article describes the mentioned framework and tooling in more detail and finally it will show how to build a small sample ```FXVComp``` component.
 
 Code examples can be downloaded from [xxx](xxx).
 
-## Setting up vanilla JavaFX applications
+## The ```FXVComp``` framework
+
+The following picture gives an overview of the ```FXVComp``` framework:
+
+Next there is a detailed description of the framework types.
+
+### ```FXCView```
 
 A typical JavaFX application is composed from multiple artifacts. Following some naming conventions helps to keep track in this fast spreading jungle of files. Let's say we want to build an app called ```XApp```. Here is what non-trivial JavaFX apps are typically built from:
 
