@@ -10,24 +10,87 @@ Large systems are typically built from smaller components which themselves are b
 
 A visual component in ```FXVComp``` typically consists at least of the following parts:
 
-* A component class derived from ```de.ruu.lib.fx.comp.FXCView```,
-* a ```.fxml``` file,
-* a component controller class derived from ```de.ruu.lib.fx.comp.FXCViewController``` and
-* a component service implementation extending ```de.ruu.lib.fx.comp.FXCViewService```.
+* A ```.fxml``` file with the declarative description of the UI,
+* a component class implementing ```de.ruu.lib.fx.comp.FXCView```,
+* a component controller class implementing ```de.ruu.lib.fx.comp.FXCViewController``` that defines the behaviour of the component and
+* a component service implementing ```de.ruu.lib.fx.comp.FXCViewService```.
 
-The super types of these artifacts are provided by the ```FXVComp``` framework and will be described in the following section.
+Each part will be described in detail in one of the following sections.
 
-In fact there can be even more artifacts that are used by ```FXVComp``` components. These will also be described later. 
+> In fact there can be even more artifacts that are used by ```FXVComp``` components. These will also be described later. 
 
 ## ```FXVComp``` framework
 
 The following picture gives an overview of the ```FXVComp``` framework:
 
-xxxxxxxxxxxxxxxx TODO xxxxxxxxxxxxxxxx
+![```FXVComp``` framework overview](de.ruu.lib.fx.comp.png)
 
-Next there is a detailed description of the framework types.
+In the next the ```FXVComp``` naming conventions will be described.
+
+## The ```FXVComp``` naming conventions
+
+The <code>FXComp</code> naming conventions support automation of recurring tasks when creating visual components. For a visual component named ```X``` the conventions expect:
+
+* component class name: <code>X</code>
+* component service interface name: <code>XService</code>
+* component controller class name: <code>XController</code>
+* application class name: <code>XApp</code>
+* application runner class name: <code>XAppRunner</code>
+
+These naming conventions can be overwritten in the classes described later.
+
+Before going too much into details this following demonstrates the ease of use of ```FXVComp``` components.
+
+## Using the ```FXVComp``` framework
+
+When relying on the ```FXVComp``` naming conventions building a small but complete visual component is really easy. If we want to create a component named ```X``` the following simple steps have to be made.
+
+> Moreover FXVComp comes with a generator tool, that creates skeletons for the necessary artifacts. This tool will be described later on.
+
+### Create ```X.fxml``` file
+
+```.fxml``` files contain declarative descriptions of the visual parts of the UI. [Gluon Scenebuilder](https://gluonhq.com/products/scene-builder/) is a visual designer tool to create ```.fxml``` files. The picture shows the visual appearance of the X component in scenebuilder.
+
+![```X.fxml``` in scenebuilder](scenebuilder.png)
+
+### Implement ```FXCView```
+
+If the default naming conventions suffice implementing a ```FXCView``` is as simple as:
+
+```java
+public class X extends DefaultFXCView { }
+```
+
+There is nothing more to be done but creating an empty class that ```extends DefaultFXCView```.
+
+### Implement ```FXCViewController```
+
+
+### Implement ```FXCViewService```
+### Implement ```FXCApp```
+### Implement ```FXCAppRunner```
 
 ### ```FXCView```
+
+In ```FXVComp``` a visual component implements ```FXCView```. Therefore it has to provide only two methods: ```getLocalRoot()``` and ```getService()```. In case the visual component does not expose any specific services the latter method can be implemented by just returning an empty implementation of ```FXCViewService```.
+
+```getLocalRoot()``` provides a ```javafx.scene.Parent``` object that represents the root of the component's tree of nodes. The tree of nodes defines the visual appearance of the component.
+
+### ```DefaultFXCView```
+
+```DefaultFXCView``` is an abstract implementation of ```FXCView``` that leverages the ```FXVComp``` naming conventions to automate the bootstrapping of all the parts that contribute to the overall features of a ```FXVComp``` component. You can adjust the bootstrapping mechanisms by overriding protected methods.
+
+In this implementation ```getLocalRoot()``` loads the component's tree of nodes from an <code>.fxml</code> file. It looks for the file by leveraging the <code>FXVComp</code> default naming conventions (see
+{@link de.ruu.lib.fx.comp}) or the overridden return value from {@link
+#getFXLMResourceName()}
+
+You can run and test an implementation of ```DefaultFXCView``` conveniently with ```FXCApp``` and ```FXCAppRunner```.
+
+### ```FXCApp```
+
+
+
+### ```FXCAppRunner```
 
 xxxxxxxxxxxxxxxx TODO xxxxxxxxxxxxxxxx
 
@@ -49,7 +112,7 @@ A typical JavaFX application is composed from multiple artifacts. Following some
 
 * ```XApp.fxml```
  
-   ```.fxml``` files contain declarative descriptions of the visual parts of the UI. [Gluon Scenebuilder](https://gluonhq.com/products/scene-builder/) is a visual designer tool to create ```.fxml``` files.
+
 
 * ```XAppController.java```
 
