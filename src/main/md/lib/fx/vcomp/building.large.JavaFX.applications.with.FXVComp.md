@@ -114,7 +114,7 @@ When clicking the button a message is printed to the console.
 
 ### Implement ```FXCViewService```
 
-As long as there is no particular service a ```FXVComp``` component provides, writing a service interface is as simple as:
+As long as a ```FXVComp``` component does not provide a particular serice, writing a service interface is as simple as:
 
 ```java
 public interface XService extends FXCViewService { }
@@ -189,18 +189,17 @@ In ```FXVComp``` a visual component implements ```FXCView```. Therefore it has t
 ```DefaultFXCView``` is an abstract implementation of ```FXCView``` that leverages the ```FXVComp``` naming conventions to automate the bootstrapping of all the parts that contribute to the overall features of a ```FXVComp``` component. You can adjust the bootstrapping mechanisms by overriding protected methods.
 
 In this implementation ```getLocalRoot()``` loads the component's tree of nodes from an <code>.fxml</code> file. It looks for the file by leveraging the <code>FXVComp</code> default naming conventions (see
-{@link de.ruu.lib.fx.comp}) or the overridden return value from {@link
-#getFXLMResourceName()}
+javadoc for package ```de.ruu.lib.fx.comp```) or the overridden return value from ```getFXLMResourceName()```.
 
 You can run and test an implementation of ```DefaultFXCView``` conveniently with ```FXCApp``` and ```FXCAppRunner```.
 
 ### ```FXCApp```
 
-```FXCApp``` is an abstract base class for JavaFX {@link Application}s with CDI support. <code>FXCApp</code>s provide convenient support for automatic initialisation of various parts of JavaFX applications with CDI support.
+```FXCApp``` is an abstract base class for JavaFX ```javafx.application.Application```s with CDI support. <code>FXCApp</code>s provide convenient support for automatic initialisation of various parts of JavaFX applications with CDI support.
 
-CDI is bootstrapped from {@link FXCAppRunner}s which call ```Application#launch(Class, String...)``` after bootstrapping CDI. This allows JavaFX call the ```start(Stage)``` method, which is the common way to start JavaFX applications, to stay independent from any CDI bootstrapping efforts.
+CDI is bootstrapped from ```FXCAppRunner```s which call ```Application#launch(Class, String...)``` after bootstrapping CDI. This allows JavaFX call the ```start(Stage)``` method, which is the common way to start JavaFX applications, to stay independent from any CDI bootstrapping efforts.
 
-While {@link FXCApp} instances itself are not CDI managed, the above mentioned {@link DefaultFXCView} and its ```FXCViewController``` objects are CDI managed. This makes CDI available for JavaFX applications while preserving benefits from JavaFX injection via <code>@FXML</code> annotations.
+While ```FXCApp``` instances itself are not CDI managed, the above mentioned ```DefaultFXCView``` and its ```FXCViewController``` objects are CDI managed. This makes CDI available for JavaFX applications while preserving benefits from JavaFX injection via <code>@FXML</code> annotations.
 
 ### ```FXCAppRunner```
 
