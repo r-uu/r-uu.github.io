@@ -39,7 +39,7 @@ In the next section the ```FXVComp``` naming conventions will be described brief
 
 ---
 
-# The ```FXVComp``` naming conventions
+# ```FXVComp``` naming conventions
 
 The <code>FXComp</code> naming conventions support automation of recurring tasks when creating visual components. For a visual component named ```X``` the conventions expect:
 
@@ -222,29 +222,62 @@ In ```FXVComp``` a visual component implements ```FXCView```. Therefore it has t
 In this implementation ```getLocalRoot()``` loads the component's tree of nodes from an <code>.fxml</code> file. It looks for the file by leveraging the ```FXVComp``` default naming conventions (see
 javadoc for package ```de.ruu.lib.fx.comp```) or the overridden return value from ```getFXLMResourceName()```.
 
-You can run and test an implementation of ```DefaultFXCView``` conveniently with ```FXCApp``` and ```FXCAppRunner```.
+You can run and test implementations of ```DefaultFXCView``` conveniently with ```FXCApp``` and ```FXCAppRunner```.
 
 ---
 
 ## ```FXCApp```
 
-```FXCApp``` is an abstract base class for JavaFX ```javafx.application.Application```s with CDI support. <code>FXCApp</code>s provide convenient support for automatic initialisation of various parts of JavaFX applications with CDI support.
+```FXCApp``` is an abstract sub class of JavaFX ```javafx.application.Application```s with CDI support. <code>FXCApp</code>s provide convenient support for automatic initialisation of various parts of JavaFX applications with CDI support.
 
-CDI is bootstrapped from ```FXCAppRunner```s which call ```Application#launch(Class, String...)``` after bootstrapping CDI. This allows JavaFX call the ```start(Stage)``` method, which is the common way to start JavaFX applications, to stay independent from any CDI bootstrapping efforts.
+CDI is bootstrapped from ```FXCAppRunner```s (see below).
 
-While ```FXCApp``` instances itself are not CDI managed, the above mentioned ```DefaultFXCView``` and its ```FXCViewController``` objects are CDI managed. This makes CDI available for JavaFX applications while preserving benefits from JavaFX injection via <code>@FXML</code> annotations.
+While ```FXCApp``` instances itself are not CDI managed, the above mentioned ```DefaultFXCView``` and its ```FXCViewController``` objects can be managed by CDI. This makes CDI available for JavaFX applications while preserving the benefits of JavaFX injection via <code>@FXML</code> annotations.
 
 ---
 
 ## ```FXCAppRunner```
 
-```FXCAppRunner``` is an abstract base class for classes that launch JavaFX applications with CDI support.
+```FXCAppRunner``` is an abstract base class for classes that launch ```FXCApp```s. They intercept the usual JavaFX application start procedure in order to bootstrap CDI before they call ```Application#launch(Class, String...)``` of ```FXCApp```. This continues the usuall JavaFX start procedure for JavaFX applications.
+
+As a result ```FXCApp```s do not have to take care of any CDI bootstrapping and still have full CDI support. The same applies to the other parts of the ```FXVComp``` framework.
 
 ---
 
-# Integrating ```FXVComp``` components to create large JavaFX applications
+# Aggregating ```FXVComp``` components to create large JavaFX applications
 
-To demonstrate how to integrate ```FXVComp``` components a second component named ```Y``` is being generated. 
+To demonstrate aggregation of ```FXVComp``` components to bigger systems the following shows, how to populate the ```AnchorPane``` of the ```X``` component from the above example with tree of nodes from a second component called ```Y```.
+
+```Y``` can be created in the same way as ```X``` by generating skeleton artifacts with another ```FXVComp``` code generator and adjusting these artifacts to meet the requirements of the new ```FXVComp``` component.
+
+Here is how an instance of ```Y``` is CDI injected into the controller f 
+
+```java
+public class XController extends DefaultFXCViewController 
+{
+	@FXML private Button button;
+	@FXML private AnchorPane anchorPane;
+
+	@Inject private Y y;
+
+	@Override
+	@FXML
+	protected void initialize()
+	{
+		Parent root = y.getLocalRoot();
+		anchorPane.getChildren().add(root);
+		button.setOnAction(e -> onAction(e));
+	}
+
+	private void onAction(ActionEvent e)
+	{
+		CDI.current().getBeanManager().fireEvent(new XButtonPressed(this, "hello world"));
+	}
+}
+```
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+a second component named ```Y``` is being generated. In the ```X``` component there is an ```AnchorPane``` that is not populated so far.
 
 ## create event type
 ## fire event
